@@ -64,6 +64,7 @@
     <Compile Include="ValueProvider\IValueProvider.cs" />
     <Compile Include="ValueProvider\Jurrasic.cs" />
     <Compile Include="ValueProvider\Variables.cs" />
+    <Compile Include="ViewModels\ExpressionVisualizerViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -104,8 +105,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="View\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
