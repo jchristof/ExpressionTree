@@ -16,11 +16,11 @@ namespace UnitTests {
 
             var expressionTree = new ExpressionTree();
 
-            expressionTree.Parse("[eval:[var:one] + [var:one]]");
+            expressionTree.Parse("[var:one][eval:[eval:[eval:[var:one] + [var:one]]] + 1]");
 
             var value = expressionTree.Evaluate(evaluator);
 
-            Assert.IsTrue(value == "2");
+            Assert.IsTrue(value == "13");
         }
     }
 }

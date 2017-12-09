@@ -1,8 +1,8 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq.Expressions;
 
 namespace Expression_Tree.Tree {
     [DebuggerDisplay("{Expression}")]
@@ -25,6 +25,27 @@ namespace Expression_Tree.Tree {
             var newChild = new ExpressionNode { Parent = this };
             Children.Add(newChild);
             return newChild;
+        }
+
+        public static ExpressionNode CompleteExpressionNode(ExpressionNode node) {
+
+            string subExpression = node.Expression.Substring(1, node.Expression.Length - 2);
+            string[] parts = subExpression.Split(new[] { ':' }, 2);
+
+            if (parts.Length != 2) {
+                node.IsExpression = false;
+                return node;
+            }
+
+            Enum.TryParse(parts[0], out ExpressionType expressionType);
+
+            node.ExpressionType = expressionType;
+            node.RHS = parts[1].Trim();
+
+            if (expressionType == ExpressionType.none)
+                node.IsExpression = false;
+
+            return node;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

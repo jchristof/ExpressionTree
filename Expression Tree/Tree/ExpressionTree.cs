@@ -33,8 +33,6 @@ namespace Expression_Tree.Tree {
 
                         currentNode.SubString = new String(currentNode.Expression.ToCharArray());
                         currentNode = currentNode.Parent;
-
-
                         break;
                 }
                 spanPosition++;
@@ -45,27 +43,6 @@ namespace Expression_Tree.Tree {
                 currentNode.Evaluation = currentNode.Expression;
 
             } while ((currentNode = currentNode.Parent) != null);
-        }
-
-        static ExpressionNode CompleteExpressionNode(ExpressionNode node) {
-
-            string subExpression = node.Expression.Substring(1, node.Expression.Length - 2);
-            string[] parts = subExpression.Split(new[] { ':' }, 2);
-
-            if (parts.Length != 2) {
-                node.IsExpression = false;
-                return node;
-            }
-
-            Enum.TryParse(parts[0], out ExpressionType expressionType);
-
-            node.ExpressionType = expressionType;
-            node.RHS = parts[1].Trim();
-
-            if (expressionType == ExpressionType.none)
-                node.IsExpression = false;
-
-            return node;
         }
 
         private ExpressionEvaluator evaluator;
@@ -106,7 +83,7 @@ namespace Expression_Tree.Tree {
                     if (n.IsExpression)
                         node.Expression = ReplaceFirst(node.Expression, n.SubString, n.Evaluation);
 
-            CompleteExpressionNode(node);
+            node = ExpressionNode.CompleteExpressionNode(node);
 
             if (node.ExpressionType != ExpressionType.none)
                 node.Evaluation = evaluator.Evaluate(node.ExpressionType, node.RHS);
