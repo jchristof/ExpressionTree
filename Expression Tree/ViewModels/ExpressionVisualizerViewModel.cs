@@ -9,12 +9,19 @@ using Expression_Tree.ValueProvider;
 namespace Expression_Tree.ViewModels {
     class ExpressionVisualizerViewModel : INotifyPropertyChanged{
 
-        public ExpressionVisualizerViewModel() {
-            expressionVariables = new Dictionary<string, string>();
+        public ExpressionVisualizerViewModel(Dictionary<string, string> savedVars) {
+            Variables = new ObservableCollection<DataVariable>();
+            expressionVariables = savedVars;
+
+            foreach (var v in expressionVariables) {
+                Variables.Add(new DataVariable{Key = v.Key, Value = v.Value});
+            }
+            
             expressionEvaluator = new ExpressionEvaluator(new Variables(expressionVariables), new Jurrasic(string.Empty));
         }
 
-        private readonly IDictionary<string, string> expressionVariables;
+        private readonly Dictionary<string, string> expressionVariables;
+        public Dictionary<string, string> ExpressionVariables => expressionVariables;
 
         public ExpressionTree expressionTree = new ExpressionTree();
         private readonly ExpressionEvaluator expressionEvaluator;
@@ -25,7 +32,7 @@ namespace Expression_Tree.ViewModels {
             public string Value { get; set; }
         }
 
-        public ObservableCollection<DataVariable> Variables { get; set; } = new ObservableCollection<DataVariable>();
+        public ObservableCollection<DataVariable> Variables { get; set; }
 
         private string expression;
         public string Expression {
