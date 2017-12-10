@@ -8,12 +8,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBox Text="{Binding Expression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-        <TreeView x:Name="Nodes" Grid.Row="1">
+        <TextBox Text="{Binding Expression, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TreeView x:Name="Nodes" Grid.Row="1" Grid.Column="0">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type expression:ExpressionNode}" ItemsSource="{Binding Children}">
                     <StackPanel>
@@ -28,5 +32,13 @@
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
+        <DataGrid ItemsSource="{Binding Variables}" 
+                  RowEditEnding="DataGrid_OnRowEditEnding"
+                  CanUserAddRows="True"
+                  IsReadOnly="False"
+                  CanUserDeleteRows="True"
+                  IsSynchronizedWithCurrentItem="True"
+                  Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" >
+        </DataGrid>
     </Grid>
 </Window>

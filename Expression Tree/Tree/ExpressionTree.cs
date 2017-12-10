@@ -58,6 +58,9 @@ namespace Expression_Tree.Tree {
         private ExpressionEvaluator evaluator;
 
         public string Evaluate(ExpressionEvaluator evaluator) {
+            if (Root == null)
+                return string.Empty;
+
             this.evaluator = evaluator;
 
             Root.Evaluation = Root.Expression;
