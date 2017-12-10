@@ -10,6 +10,7 @@ namespace Expression_Tree.Tree {
         public int StartIndex { get; set; }
         public int EndIndex { get; set; }
         public bool IsExpression { get; set; }
+        public bool Escaped { get; set; }
         public string Expression { get; set; }
         public string SubString { get; set; }
         public string Evaluation { get; set; }
@@ -27,7 +28,13 @@ namespace Expression_Tree.Tree {
             return newChild;
         }
 
-        public static ExpressionNode CompleteExpressionNode(ExpressionNode node) {
+        public static ExpressionNode CompleteExpressionNode(ExpressionNode node, ExpressionEvaluator evaluator) {
+
+            if (node.Escaped) {
+                node.Evaluation = node.SubString.Substring(1);
+                node.IsExpression = true;
+                return node;
+            }
 
             string subExpression = node.Expression.Substring(1, node.Expression.Length - 2);
             string[] parts = subExpression.Split(new[] { ':' }, 2);
@@ -44,6 +51,9 @@ namespace Expression_Tree.Tree {
 
             if (expressionType == ExpressionType.none)
                 node.IsExpression = false;
+
+            var value = evaluator.Evaluate(node.ExpressionType, node.RHS);
+            node.Evaluation = value ?? node.SubString;
 
             return node;
         }

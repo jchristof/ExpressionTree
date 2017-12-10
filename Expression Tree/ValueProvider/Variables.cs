@@ -10,7 +10,7 @@ namespace Expression_Tree.ValueProvider {
 
         private readonly IDictionary<string, string> variables;
         public string GetValue(string expression) {
-            return variables.ContainsKey(expression) ? variables[expression] : string.Empty;
+            return variables.ContainsKey(expression) ? variables[expression] : null;
         }
 
     }

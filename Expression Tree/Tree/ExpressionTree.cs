@@ -17,11 +17,16 @@ namespace Expression_Tree.Tree {
 
             currentNode.StartIndex = 0;
             currentNode.Parent = null;
+
+            bool escaped = false;
+
             foreach (char character in expression) {
-                switch (character) {
-                    case '[':
+                switch (character) {                            
+                    case '[':                    
                         currentNode = currentNode.AddChild();
-                        currentNode.StartIndex = spanPosition;
+                        currentNode.Escaped = escaped;
+                        currentNode.StartIndex = escaped ? spanPosition - 1 : spanPosition;
+                        escaped = false;
                         break;
                     case ']':
                         if (currentNode.Parent == null)
@@ -35,6 +40,11 @@ namespace Expression_Tree.Tree {
                         currentNode = currentNode.Parent;
                         break;
                 }
+
+                if (character == '\\') {
+                    escaped = !escaped;
+                }
+
                 spanPosition++;
             }
             do {
@@ -83,10 +93,7 @@ namespace Expression_Tree.Tree {
                     if (n.IsExpression)
                         node.Expression = ReplaceFirst(node.Expression, n.SubString, n.Evaluation);
 
-            node = ExpressionNode.CompleteExpressionNode(node);
-
-            if (node.ExpressionType != ExpressionType.none)
-                node.Evaluation = evaluator.Evaluate(node.ExpressionType, node.RHS);
+            ExpressionNode.CompleteExpressionNode(node, evaluator); 
         }
 
         static string ReplaceFirst(string text, string search, string replace) {
