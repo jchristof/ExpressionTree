@@ -9,6 +9,8 @@ namespace Expression_Tree {
 
     public partial class MainWindow {
         public MainWindow() {
+            //Properties.Settings.Default.Reset();
+
             var settings = Properties.Settings.Default;
             var variables = JsonConvert.DeserializeObject<Dictionary<string, string>>(settings.Variables) ?? new Dictionary<string, string>();
 
