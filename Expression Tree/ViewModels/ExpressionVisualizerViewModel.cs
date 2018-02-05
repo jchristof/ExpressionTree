@@ -49,7 +49,7 @@ namespace Expression_Tree.ViewModels {
         }
 
         public void RowAdded(object variable) {
-            if(!(variable is DataVariable v))
+            if(!(variable is DataVariable v) || v.Key == null)
                 return;
 
             if (expressionVariables.ContainsKey(v.Key))
