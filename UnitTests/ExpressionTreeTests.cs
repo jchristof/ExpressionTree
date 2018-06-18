@@ -64,5 +64,37 @@ namespace UnitTests {
             value = expressionTree.Evaluate(evaluator);
             Assert.IsTrue(value == @"\\1\\1");
         }
+
+        [TestMethod]
+        public void ExpressionTreeTests_ChangeUnderlingVariables() {
+            var variables = new Dictionary<string, string> {{"one", "1"}};
+            var evaluator = new ExpressionEvaluator(new Variables(variables), new Jurrasic(string.Empty));
+            var expressionTree = new ExpressionTree();
+            expressionTree.Parse("[var:one]");
+
+            var value = expressionTree.Evaluate(evaluator);
+
+            Assert.IsTrue(value == "1");
+
+            variables.Remove("one");
+            variables["one"] = "2";
+
+
+            value = expressionTree.Evaluate(evaluator);
+
+            Assert.IsTrue(value == "2");
+        }
+
+        [TestMethod]
+        public void ExpressionTreeTests_FailingTests() {
+            var variables = new Dictionary<string, string> { { "one", "1" } };
+            var evaluator = new ExpressionEvaluator(new Variables(variables), new Jurrasic(string.Empty));
+            var expressionTree = new ExpressionTree();
+            expressionTree.Parse(@"\[var:one][var:one]");
+
+            var value = expressionTree.Evaluate(evaluator);
+            
+            Assert.IsTrue(value == "[var:one]1");
+        }
     }
 }

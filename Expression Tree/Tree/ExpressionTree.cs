@@ -96,7 +96,7 @@ namespace Expression_Tree.Tree {
                     if (n.IsExpression)
                         node.Expression = ReplaceFirst(node.Expression, n.SubString, n.Evaluation);
 
-            ExpressionNode.CompleteExpressionNode(node, evaluator); 
+            node.CompleteExpressionNode(evaluator);
         }
 
         static string ReplaceFirst(string text, string search, string replace) {

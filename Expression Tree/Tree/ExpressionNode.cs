@@ -28,34 +28,32 @@ namespace Expression_Tree.Tree {
             return newChild;
         }
 
-        public static ExpressionNode CompleteExpressionNode(ExpressionNode node, ExpressionEvaluator evaluator) {
+        public void CompleteExpressionNode(ExpressionEvaluator evaluator) {
 
-            if (node.Escaped) {
-                node.Evaluation = node.SubString.Substring(1);
-                node.IsExpression = true;
-                return node;
+            if (Escaped) {
+                Evaluation = SubString.Substring(1);
+                IsExpression = true;
+                return ;
             }
 
-            string subExpression = node.Expression.Substring(1, node.Expression.Length - 2);
+            string subExpression = Expression.Substring(1, Expression.Length - 2);
             string[] parts = subExpression.Split(new[] { ':' }, 2);
 
             if (parts.Length != 2) {
-                node.IsExpression = false;
-                return node;
+                IsExpression = false;
+                return;
             }
 
             Enum.TryParse(parts[0], out ExpressionType expressionType);
 
-            node.ExpressionType = expressionType;
-            node.RHS = parts[1].Trim();
+            ExpressionType = expressionType;
+            RHS = parts[1].Trim();
 
             if (expressionType == ExpressionType.none)
-                node.IsExpression = false;
+                IsExpression = false;
 
-            var value = evaluator.Evaluate(node.ExpressionType, node.RHS);
-            node.Evaluation = value ?? node.SubString;
-
-            return node;
+            var value = evaluator.Evaluate(ExpressionType, RHS);
+            Evaluation = value ?? SubString;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
