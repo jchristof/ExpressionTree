@@ -18,12 +18,13 @@ namespace Expression_Tree.ViewModels {
             }
             
             expressionEvaluator = new ExpressionEvaluator(new Variables(expressionVariables), new Jurrasic(string.Empty));
+            expressionTree = new ExpressionTree(expressionEvaluator);
         }
 
         private readonly Dictionary<string, string> expressionVariables;
         public Dictionary<string, string> ExpressionVariables => expressionVariables;
 
-        public ExpressionTree expressionTree = new ExpressionTree();
+        public readonly ExpressionTree expressionTree;
         private readonly ExpressionEvaluator expressionEvaluator;
 
         public class DataVariable {
@@ -43,7 +44,7 @@ namespace Expression_Tree.ViewModels {
 
                 expression = value;
                 expressionTree.Parse(expression);
-                expressionTree.Evaluate(expressionEvaluator);
+                expressionTree.Evaluate();
                 RaisePropertyChanged();
             }
         }
@@ -56,7 +57,7 @@ namespace Expression_Tree.ViewModels {
                 Variables.Remove(v);
 
             expressionVariables[v.Key] = v.Value;
-            expressionTree.Evaluate(expressionEvaluator);
+            expressionTree.Evaluate();
             RaisePropertyChanged("Expression");
         }
 

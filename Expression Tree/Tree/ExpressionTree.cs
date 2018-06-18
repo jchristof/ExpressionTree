@@ -3,7 +3,12 @@
 namespace Expression_Tree.Tree {
     public class ExpressionTree {
 
-        public ExpressionNode Root;
+        public ExpressionTree(ExpressionEvaluator evaluator) {
+            _evaluator = evaluator;
+        }
+
+        public ExpressionNode _root;
+        private readonly ExpressionEvaluator _evaluator;
 
         /// <summary>
         /// Break the expression into a tree of parts that can each be evaluated
@@ -13,7 +18,7 @@ namespace Expression_Tree.Tree {
             int spanPosition = 0;
 
             ExpressionNode currentNode = new ExpressionNode();
-            Root = currentNode;
+            _root = currentNode;
 
             currentNode.StartIndex = 0;
             currentNode.Parent = null;
@@ -55,20 +60,16 @@ namespace Expression_Tree.Tree {
             } while ((currentNode = currentNode.Parent) != null);
         }
 
-        private ExpressionEvaluator evaluator;
-
-        public string Evaluate(ExpressionEvaluator evaluator) {
-            if (Root == null)
+        public string Evaluate() {
+            if (_root?.Children == null)
                 return string.Empty;
 
-            this.evaluator = evaluator;
+            _root.Evaluation = _root.Expression;
 
-            Root.Evaluation = Root.Expression;
+            TraverseEvaluate(_root);
+            TraverseResolve(_root);
 
-            TraverseEvaluate(Root);
-            TraverseResolve(Root);
-
-            return Root.Evaluation;
+            return _root.Evaluation;
         }
 
         private void TraverseResolve(ExpressionNode node) {
@@ -77,7 +78,7 @@ namespace Expression_Tree.Tree {
 
             foreach (var n in node.Children)
                 if (n.IsExpression)
-                    Root.Evaluation = ReplaceFirst(Root.Evaluation, n.SubString, n.Evaluation);
+                    _root.Evaluation = ReplaceFirst(_root.Evaluation, n.SubString, n.Evaluation);
                 else
                     TraverseResolve(n);
         }
@@ -96,7 +97,7 @@ namespace Expression_Tree.Tree {
                     if (n.IsExpression)
                         node.Expression = ReplaceFirst(node.Expression, n.SubString, n.Evaluation);
 
-            node.CompleteExpressionNode(evaluator);
+            node.CompleteExpressionNode(_evaluator);
         }
 
         static string ReplaceFirst(string text, string search, string replace) {

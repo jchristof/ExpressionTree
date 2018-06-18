@@ -24,7 +24,7 @@ namespace Expression_Tree {
         private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             if (e.PropertyName == "Expression") {
                 Nodes.Items.Clear();
-                Nodes.Items.Add(ViewModel.expressionTree.Root);
+                Nodes.Items.Add(ViewModel.expressionTree._root);
             }
         }
 

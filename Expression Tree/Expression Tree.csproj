@@ -62,6 +62,7 @@
     </ApplicationDefinition>
     <Compile Include="Tree\ExpressionEvaluator.cs" />
     <Compile Include="Tree\ExpressionNode.cs" />
+    <Compile Include="Tree\ExpressionParser.cs" />
     <Compile Include="Tree\ExpressionTree.cs" />
     <Compile Include="Tree\ExpressionType.cs" />
     <Compile Include="ValueProvider\IValueProvider.cs" />
